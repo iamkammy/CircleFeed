@@ -1,38 +1,138 @@
-.App {
-  text-align: center;
+@import url("https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap");
+
+a {
+	color: black;
+	text-decoration: none;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.brand-logo {
+	font-family: "Grand Hotel" !important;
+}
+.fs-1 {
+	font-size: 16px !important;
+}
+.fs-2 {
+	font-size: 20px !important;
+}
+.fs-md {
+	font-size: 34px !important;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.auth-card {
+	padding: 20px;
+	text-align: center;
+	position: absolute !important;
+	min-width: 400px;
+	max-width: 400px;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.signin {
+	font-family: BogleWeb, Helvetica Neue, Helvetica, Arial, sans-serif;
+	font-weight: 500;
+	font-size: 24px;
+	text-align: center;
+	letter-spacing: -0.6px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.input-field input:focus {
+	border-bottom: 1px solid #099bd4 !important;
+	box-shadow: 0 1px 0 0 #099bd4 !important;
+}
+.input-field label {
+	color: #099bd4 !important;
+}
+.signuplink {
+	color: rgb(43 158 214);
+	font-weight: bold;
+	text-decoration-line: underline;
+}
+.signuptext {
+	color: grey;
+	font-size: 15px;
+	word-break: break-word;
+	margin: 0;
 }
 
-.App-link {
-  color: #61dafb;
+/* toast message css */
+#toast-container {
+	top: 70px !important;
+	right: 20px !important;
+	left: auto !important;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/*  */
+
+.animated {
+	animation: up-down 2s ease-in-out infinite alternate-reverse both;
 }
+
+@-webkit-keyframes up-down {
+	0% {
+		transform: translateY(10px);
+	}
+	100% {
+		transform: translateY(-10px);
+	}
+}
+
+@keyframes up-down {
+	0% {
+		transform: translateY(10px);
+	}
+	100% {
+		transform: translateY(-10px);
+	}
+}
+
+@media (min-width: 320px) and (max-width: 620px) {
+	.brand-logo {
+		font-size: 28px !important;
+	}
+}
+
+/* preview image section
+used in  Signup Component
+*/
+
+.previewImageSection {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.previewImageSection .left {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.previewImageSection .left div#ImgHolder {
+	width: 80px;
+	height: 80px;
+	border-radius: 100%;
+}
+.previewImageSection .left #ImgHolder #userpic {
+	width: 100%;
+	height: 100%;
+}
+
+/* Navbar component css */
+
+.flex {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+.ptr {
+	cursor: pointer;
+}
+.desktopMenu {
+	width: 200px;
+	padding: 10px;
+}
+.user-name {
+	font-weight: 400;
+	font-size: 13px;
+}
+/*  */
