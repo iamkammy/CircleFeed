@@ -131,7 +131,7 @@ const Login = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign in with google
           </Typography>
 
           <form onSubmit={handleSubmit} className={classes.form} noValidate>
