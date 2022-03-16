@@ -38,6 +38,7 @@ const Home = () => {
       })
       .then((res) => {
         console.log(typeof res.data, res.data);
+
         setData(res.data.posts);
       })
       .catch((err) => {
@@ -56,7 +57,7 @@ const Home = () => {
   return (
     <div className={classes.root}>
       {data.length ? (
-        data.map((item) => {
+        data?.map((item) => {
           return <Post key={item._id} item={item} removepost={removePost} />;
         })
       ) : (

@@ -1,4 +1,10 @@
-export const apiURL = 'https://circle-backendapi.herokuapp.com';
+export const getBaseApiUrl = () => {
+    if (process.env.NODE_ENV === 'development') {
+        return 'http://localhost:3200'
+    } else {
+        return 'https://circle-backendapi.herokuapp.com';
+    }
+}
 
 // http://localhost:5000
 export const cloudinary = {
