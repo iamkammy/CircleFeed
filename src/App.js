@@ -1,6 +1,17 @@
-import React, { createContext, useState, useReducer, useEffect, useContext } from 'react';
-import './App.css';
-import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
+import React, {
+  createContext,
+  useState,
+  useReducer,
+  useEffect,
+  useContext,
+} from "react";
+import "./App.css";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useHistory,
+} from "react-router-dom";
 import {
   Navbar,
   Home,
@@ -12,16 +23,13 @@ import {
   UserProfile,
   ResetPassword,
   SetNewPassword,
-  Comment
-}
-  from './components';
-import SnackBar from './components/utilityComponents/snackbar';
+  Comment,
+} from "./components";
+import SnackBar from "./components/utilityComponents/snackbar";
 
-
-import { reducer, initialState } from './reducers/userReducer';
-import theme from './theme';
-import { ThemeProvider } from '@material-ui/core/styles';
-import reportWebVitals from './reportWebVitals';
+import { reducer, initialState } from "./reducers/userReducer";
+import theme from "./theme";
+import { ThemeProvider } from "@material-ui/core/styles";
 
 export const UserContext = createContext();
 export const SnackbarContext = createContext();
@@ -32,14 +40,13 @@ const Routing = () => {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    reportWebVitals()
     if (user) {
-      dispatch({ type: "USER", payload: user })
+      dispatch({ type: "USER", payload: user });
       // history.push('/');
     } else {
-      history.push('/login')
+      history.push("/login");
     }
-  }, [])
+  }, []);
 
   return (
     <Switch>
@@ -54,8 +61,8 @@ const Routing = () => {
       <Route exact path="/reset/:token" component={SetNewPassword} />
       <Route exact path="/comment" component={Comment} />
     </Switch>
-  )
-}
+  );
+};
 
 // App Component
 function App() {
@@ -63,42 +70,47 @@ function App() {
 
   // function to close snackbar,  and to open snackbar just pass open prop in snackbar
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
-    setSnackbarData(preVal => {
+    setSnackbarData((preVal) => {
       return {
         ...preVal,
-        open: false
-      }
+        open: false,
+      };
     });
   };
 
   const [snackbarData, setSnackbarData] = useState({
     open: false,
     message: null,
-    type: 'info',
+    type: "info",
     handleClose,
     duration: 4000,
     position: {
-      vertical: 'bottom',
-      horizontal: 'center'
-    }
-  })
+      vertical: "bottom",
+      horizontal: "center",
+    },
+  });
 
-  const handleSnackBar = (message, type, duration, position = snackbarData.position) => {
+  const handleSnackBar = (
+    message,
+    type,
+    duration,
+    position = snackbarData.position
+  ) => {
     console.log(message, type, duration);
-    setSnackbarData(preVal => {
+    setSnackbarData((preVal) => {
       return {
         ...preVal,
         open: true,
         message: message,
         type: type,
         duration: duration,
-        position: position
-      }
-    })
-  }
+        position: position,
+      };
+    });
+  };
 
   return (
     <>

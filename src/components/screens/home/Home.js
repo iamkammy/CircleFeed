@@ -3,23 +3,35 @@ import "./home.css";
 import axios from "../../../helpers/axios";
 import Post from "../post/post";
 import { UserContext } from "../../../App";
-import PostShimmer from '../../utilityComponents/shimmer';
+import PostShimmer from "../../utilityComponents/shimmer";
 import { makeStyles } from "@material-ui/core/styles";
+import { Button, Typography } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+import Add from "@material-ui/icons/Add";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 500,
     margin: "70px auto 20px",
     [theme.breakpoints.down("sm")]: {
-      maxWidth: '98vw',
+      maxWidth: "98vw",
     },
-  }
+  },
+  blankscreen: {
+    display: "flex",
+    height: "calc(100vh - 100px)",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+  },
 }));
 
 const Home = () => {
   const [data, setData] = useState([]);
+  const [isPostsLoading, setIsPostsLoading] = useState(false);
   const { state } = useContext(UserContext);
   const classes = useStyles();
+  const history = useHistory();
 
   useEffect(() => {
     console.log("Home component,  state changed");
@@ -30,6 +42,7 @@ const Home = () => {
 
   //functio to fetch all posts
   const fetchAllPosts = () => {
+    setIsPostsLoading(true);
     axios
       .get("/allpost", {
         headers: {
@@ -37,11 +50,11 @@ const Home = () => {
         },
       })
       .then((res) => {
-        console.log(typeof res.data, res.data);
-
+        setIsPostsLoading(false);
         setData(res.data.posts);
       })
       .catch((err) => {
+        setIsPostsLoading(false);
         console.log(err.response, "error in fetch");
       });
   };
@@ -56,16 +69,33 @@ const Home = () => {
 
   return (
     <div className={classes.root}>
-      {data.length ? (
-        data?.map((item) => {
-          return <Post key={item._id} item={item} removepost={removePost} />;
-        })
-      ) : (
+      {isPostsLoading ? (
         <>
           <PostShimmer />
           <br />
           <PostShimmer />
         </>
+      ) : null}
+
+      {data.length ? (
+        data?.map((item) => {
+          return <Post key={item._id} item={item} removepost={removePost} />;
+        })
+      ) : (
+        <div className={classes.blankscreen}>
+          <Typography style={{ color: "grey", marginBottom: "10px" }}>
+            No Posts Available
+          </Typography>
+          <Button
+            endIcon={<Add />}
+            variant="outlined"
+            color="primary"
+            size="small"
+            onClick={() => history.push("/createPost")}
+          >
+            Add Post
+          </Button>
+        </div>
       )}
     </div>
   );
