@@ -51,7 +51,9 @@ const Home = () => {
       })
       .then((res) => {
         setIsPostsLoading(false);
-        setData(res.data.posts);
+        if (res.data.posts) {
+          setData(res.data.posts);
+        }
       })
       .catch((err) => {
         setIsPostsLoading(false);
@@ -83,16 +85,8 @@ const Home = () => {
         })
       ) : (
         <div className={classes.blankscreen}>
-          <Typography style={{ color: "grey", marginBottom: "10px" }}>
-            No Posts Available
-          </Typography>
-          <Button
-            endIcon={<Add />}
-            variant="outlined"
-            color="primary"
-            size="small"
-            onClick={() => history.push("/createPost")}
-          >
+          <Typography style={{ color: "grey", marginBottom: "10px" }}>No Posts Available</Typography>
+          <Button endIcon={<Add />} variant='outlined' color='primary' size='small' onClick={() => history.push("/createPost")}>
             Add Post
           </Button>
         </div>
