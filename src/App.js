@@ -1,17 +1,6 @@
-import React, {
-  createContext,
-  useState,
-  useReducer,
-  useEffect,
-  useContext,
-} from "react";
+import React, { createContext, useState, useReducer, useEffect, useContext } from "react";
 import "./App.css";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  useHistory,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, useHistory } from "react-router-dom";
 import {
   Navbar,
   Home,
@@ -50,16 +39,16 @@ const Routing = () => {
 
   return (
     <Switch>
-      <Route exact path="/" component={Home} />
-      <Route exact path="/login" component={Login} />
-      <Route exact path="/signup" component={Signup} />
-      <Route exact path="/profile" component={Profile} />
-      <Route exact path="/createPost" component={CreatePost} />
-      <Route exact path="/profile/:userid" component={UserProfile} />
-      <Route exact path="/myfollowingposts" component={MyFollowingPosts} />
-      <Route exact path="/reset" component={ResetPassword} />
-      <Route exact path="/reset/:token" component={SetNewPassword} />
-      <Route exact path="/comment" component={Comment} />
+      <Route exact path='/' component={Home} />
+      <Route exact path='/login' component={Login} />
+      <Route exact path='/signup' component={Signup} />
+      <Route exact path='/profile' component={Profile} />
+      <Route exact path='/createPost' component={CreatePost} />
+      <Route exact path='/profile/:userid' component={UserProfile} />
+      <Route exact path='/myfollowingposts' component={MyFollowingPosts} />
+      <Route exact path='/reset' component={ResetPassword} />
+      <Route exact path='/reset/:token' component={SetNewPassword} />
+      <Route exact path='/comment' component={Comment} />
     </Switch>
   );
 };
@@ -93,12 +82,7 @@ function App() {
     },
   });
 
-  const handleSnackBar = (
-    message,
-    type,
-    duration,
-    position = snackbarData.position
-  ) => {
+  const handleSnackBar = (message, type, duration, position = snackbarData.position) => {
     console.log(message, type, duration);
     setSnackbarData((preVal) => {
       return {
