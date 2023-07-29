@@ -27,6 +27,8 @@ import { NavLink, Redirect, useHistory } from "react-router-dom";
 import { UserContext, SnackbarContext } from "../App";
 import axios from "../helpers/axios";
 
+import { Avatar as AntAvatar, List as AntList, Input } from "antd";
+
 // Utility Functions
 import { debounce } from "../utils/utils";
 
@@ -150,10 +152,13 @@ const Navbar = () => {
   const [searchText, setSearchText] = useState("");
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const { state, dispatch } = useContext(UserContext);
   const { handleSnackBar } = useContext(SnackbarContext);
   const history = useHistory();
 
+  // Logout functionality
   const logout = () => {
     localStorage.clear();
     dispatch({ type: "CLEAR" });
@@ -162,9 +167,11 @@ const Navbar = () => {
   };
 
   const fetchUsers = (email) => {
+    setIsLoading(true);
     axios
       .post("/findusers", { query: email })
       .then((result) => {
+        setIsLoading(false);
         console.log(result.data.users);
         if (result.data.users.length > 0) {
           setUsers(result.data.users);
@@ -175,21 +182,22 @@ const Navbar = () => {
         }
       })
       .catch((err) => {
+        setIsLoading(false);
         console.log(err.response);
       });
   };
 
-  // const searchUsers = debounce(fetchUsers(e.target.value), 500);
+  const searchUsers = debounce(fetchUsers, 500);
 
   const handleSearchUser = (e) => {
     setSearchText(e.target.value);
     if (e.target.value === "") {
       setShowuserDiv(false);
-      setUsers([]);
       return;
     }
     setShowuserDiv(true);
-    fetchUsers(e.target.value);
+    // fetchUsers(e.target.value);
+    searchUsers(e.target.value);
   };
 
   const closeUserDiv = () => {
@@ -375,7 +383,7 @@ const Navbar = () => {
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <InputBase
+            {/* <InputBase
               style={{ color: "#000", width: "100%" }}
               placeholder='Search User by emails…'
               value={searchText}
@@ -385,9 +393,18 @@ const Navbar = () => {
                 input: classes.inputInput,
               }}
               inputProps={{ "aria-label": "search" }}
+            /> */}
+
+            <Input
+              value={searchText}
+              onChange={handleSearchUser}
+              allowClear
+              placeholder='Search User by emails…'
+              style={{ borderColor: "#fff", width: "100%" }}
+              prefix={<SearchIcon />}
             />
 
-            {showuserDiv && (
+            {/* {showuserDiv && (
               <List className={classes.userlist} dense>
                 {users?.map((user) => {
                   return (
@@ -405,6 +422,20 @@ const Navbar = () => {
                   );
                 })}
               </List>
+            )} */}
+
+            {showuserDiv && (
+              <AntList
+                className={classes.userlist}
+                itemLayout='horizontal'
+                loading={isLoading}
+                dataSource={users}
+                renderItem={(user, index) => (
+                  <AntList.Item>
+                    <AntList.Item.Meta avatar={<Avatar src={user.pic} />} title={<a href='#'>{user.name}</a>} description={user.email} />
+                  </AntList.Item>
+                )}
+              />
             )}
           </div>
 
