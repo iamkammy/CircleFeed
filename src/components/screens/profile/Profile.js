@@ -1,17 +1,16 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "../../../helpers/axios";
 import { UserContext, SnackbarContext } from "../../../App";
-import "./profile.css";
+import "./profile.scss";
 import { cloudinary } from "../../../config";
 import { Button } from "@material-ui/core";
 import CameraUpload from "../../utilityComponents/cameraUpload";
-import { PostPhotoShimmer } from '../../utilityComponents/shimmer';
+import { PostPhotoShimmer } from "../../utilityComponents/shimmer";
 
 import { makeStyles } from "@material-ui/core/styles";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import Alert from "@material-ui/lab/Alert";
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -102,10 +101,7 @@ const Profile = () => {
       })
       .then((res) => {
         console.log(res, "updated pic");
-        localStorage.setItem(
-          "user",
-          JSON.stringify({ ...state, pic: res.data.result.pic })
-        );
+        localStorage.setItem("user", JSON.stringify({ ...state, pic: res.data.result.pic }));
         dispatch({ type: "UPDATEPIC", payload: res.data.result.pic });
         setPicChange(false);
         handleSnackBar(res.data.message, "success", 2000);
@@ -130,14 +126,14 @@ const Profile = () => {
   };
 
   return (
-    <div className="parent">
-      <div className="holder">
-        <div className="avatar">
-          <img src={image} alt="avatar" />
-          <CameraUpload onImageChange={onImageChange} place="cameraIcon" />
-          <div className="updatebtn">
+    <div className='parent'>
+      <div className='holder'>
+        <div className='avatar'>
+          <img src={image} alt='avatar' />
+          <CameraUpload onImageChange={onImageChange} place='cameraIcon' />
+          <div className='updatebtn'>
             {picChange ? (
-              <Button onClick={postImage} size="small" variant="contained" color="secondary" >
+              <Button onClick={postImage} size='small' variant='contained' color='secondary'>
                 update
               </Button>
             ) : null}
@@ -147,36 +143,32 @@ const Profile = () => {
         {!state ? (
           "Loading..."
         ) : (
-            <div className="details">
-              <h3>{state.name}</h3>
-              <h5>{state.email}</h5>
-              <div className="flex">
-                <h6>
-                  {mypics.length} {mypics.length < 2 ? "post" : "posts"}
-                </h6>
-                <h6>
-                  {state.followers.length}{" "}
-                  {state.followers.length < 2 ? "follower" : "followers"}
-                </h6>
-                <h6>
-                  {state.following.length}{" "}
-                  {state.following.length < 2 ? "following" : "followings"}
-                </h6>
-              </div>
+          <div className='details'>
+            <h3 id='name'>{state.name}</h3>
+            <h5 id='email'>{state.email}</h5>
+            <div className='flex'>
+              <h5>
+                {mypics.length} {mypics.length < 2 ? "post" : "posts"}
+              </h5>
+              <h5>
+                {state.followers.length} {state.followers.length < 2 ? "follower" : "followers"}
+              </h5>
+              <h5>
+                {state.following.length} {state.following.length < 2 ? "following" : "followings"}
+              </h5>
             </div>
-          )}
+          </div>
+        )}
       </div>
 
       <GridList cellHeight={160} className={classes.gridList} cols={2}>
-        {mypics.length === 0 ? (
-          [<PostPhotoShimmer />, <PostPhotoShimmer />]
-        ) : (
-            mypics.map((item) => (
+        {mypics.length === 0
+          ? [<PostPhotoShimmer />, <PostPhotoShimmer />]
+          : mypics.map((item) => (
               <GridListTile key={item._id}>
-                <img src={item.photo} alt="mypost" />
+                <img src={item.photo} alt='mypost' />
               </GridListTile>
-            ))
-          )}
+            ))}
       </GridList>
     </div>
   );
