@@ -1,0 +1,23 @@
+.my-following-posts-container {
+  // height: 85vh;
+  max-width: 500px;
+  margin: 20px auto 20px;
+
+  // background-color: whitesmoke;
+
+  .card-block {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    margin: 0 auto;
+    margin-top: 60px;
+    left: 50%;
+    transform: translate(-50%);
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .my-following-posts-container {
+    max-width: 98vw;
+  }
+}
