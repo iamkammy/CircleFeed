@@ -1,0 +1,10 @@
+.navbar {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-bottom: 0.2px solid #e8e8e8 !important;
+  position: static !important;
+
+  .ant-list .ant-list-item .ant-list-item-meta .ant-list-item-meta-avatar {
+    margin-left: 10px;
+  }
+}
