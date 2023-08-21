@@ -1,20 +1,30 @@
 import React, { useState, useContext, useEffect } from "react";
-import "./style.css";
+import "./create-post.scss";
 import { cloudinary } from "../../../config";
 import axios from "../../../helpers/axios";
+import { useHistory } from "react-router-dom";
 import M from "materialize-css";
+import { Button, Checkbox, Form, Input, Modal, Image, Card, message } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { UploadOutlined } from "@ant-design/icons";
 import { SnackbarContext } from "../../../App";
+
+const { TextArea } = Input;
 
 const CreatePost = () => {
   const { handleSnackBar } = useContext(SnackbarContext);
+  const history = useHistory();
   const [data, setData] = useState({
     title: "",
     body: "",
   });
+
   const [image, setImage] = useState("");
   const [publisedImageUrl, setPublishedImageUrl] = useState("");
 
-  const InputValue = (e) => {
+  const [submitLoader, setSubmitLoader] = useState(false);
+
+  const handleFormDataChange = (e) => {
     const { name, value } = e.target;
     setData((preVal) => {
       return {
@@ -40,36 +50,34 @@ const CreatePost = () => {
       reader.readAsDataURL(event.target.files[0]);
     }
   };
+
   // posting data to database
   function post() {
-    let data = {
+    let payload = {
       title,
       body,
       pic: publisedImageUrl,
     };
     axios
-      .post("/createpost", data, {
+      .post("/createpost", payload, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("jwt"),
         },
       })
       .then((res) => {
         console.log(res);
-        M.toast({
-          html: res.data.message,
-          classes: "#81c784 green lighten-2 rounded",
+        message.success("Successfully posted !!", [1], () => {
+          history.push("/");
         });
       })
       .catch((err) => {
         console.log(err.response);
-        M.toast({
-          html: err.response.data.error,
-          classes: "#e57373 red lighten-2 rounded",
-        });
+        message.error("Error: " + err.response.data.error);
       });
   }
   // posting Image to cloudinary
   const postImage = () => {
+    setSubmitLoader(true);
     const data = new FormData();
     data.append("file", image);
     data.append("upload_preset", "circle");
@@ -80,88 +88,136 @@ const CreatePost = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        setSubmitLoader(false);
         console.log(data);
         if (data.error) {
-          M.toast({
-            html: data.error.message + "  and fields",
-            classes: "#c62828 red darken-3 rounded",
-          });
+          message.error(data.error.message + "  and fields");
           return;
         } else {
           setPublishedImageUrl(data.secure_url);
         }
       })
       .catch((err) => {
-        M.toast({
-          html: err + ", Internet DisConnected",
-          classes: "#e57373 red lighten-2 rounded",
-        });
+        setSubmitLoader(false);
+        message.error("Error while uploading image");
       });
   };
 
   // submit the form
   const handleSubmit = (e) => {
     e.preventDefault();
-    // handleSnackBar('hahah Done yaar', 'success', 2000);
     postImage();
   };
 
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}>
+        Upload
+      </div>
+    </div>
+  );
+
   const { title, body } = data;
   return (
-    <div className="card postcard input-filed">
-      <h5 id="heading">Tell whats your story</h5>
-      <form onSubmit={handleSubmit}>
-        <div className="input-field col s6">
-          <input
-            value={title}
-            name="title"
-            onChange={InputValue}
-            id="title"
-            type="text"
-            className="validate"
-          />
-          <label htmlFor="title">Title</label>
-        </div>
-        <div className="input-field col s6">
-          <input
-            value={body}
-            name="body"
-            onChange={InputValue}
-            id="body"
-            type="text"
-            className="validate"
-          />
-          <label htmlFor="body">Message</label>
-        </div>
+    <div className='postcard-container'>
+      <Card title='Create Your Post' bordered={true} className='card-holder'>
+        <Form
+          name='basic'
+          className='post-form'
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 16 }}
+          initialValues={{ remember: true }}
+          autoComplete='off'>
+          <Form.Item
+            label='Title'
+            name='title'
+            rules={[
+              {
+                required: true,
+                message: "Please enter post title",
+              },
+            ]}>
+            <Input value={title} name='title' placeholder='Enter Title' onChange={handleFormDataChange} id='title' />
+          </Form.Item>
 
-        <div className="file-field input-field">
-          <div className="btn upldbtn  #64b5f6 blue lighten-1">
-            <span>Upload photo</span>
-            <input
-              onChange={onImageChange}
-              type="file"
-              multiple
-              accept="image/*"
-            />
-          </div>
-          {image ? (
-            <div className="avatar-preview">
-              <img id="imagePreview" src={image} className="" alt="avatar" />
+          <Form.Item
+            label='Message'
+            name='body'
+            rules={[
+              {
+                required: true,
+                message: "Please enter message for post",
+              },
+            ]}>
+            <TextArea rows={2} value={body} name='body' placeholder='Enter Message' onChange={handleFormDataChange} id='body' />
+          </Form.Item>
+
+          <Form.Item
+            label='Upload picture'
+            name='image'
+            rules={[
+              {
+                required: true,
+                message: "Please upload the picture first",
+              },
+            ]}>
+            <div>
+              <input onChange={onImageChange} type='file' multiple accept='image/*' />
             </div>
-          ) : (
-            <span id="nophoto">No photo choosen</span>
-          )}
-        </div>
 
-        <button
-          type="submit"
-          className="btn waves-effect mt-3 waves-light #64b5f6 blue lighten-1"
-        >
-          Create post{" "}
-        </button>
-      </form>
+            {image && (
+              <div className='image-preview-holder'>
+                <Image src={image} />
+              </div>
+            )}
+          </Form.Item>
+
+          <div className='submit-btn-holder'>
+            <Button onClick={handleSubmit} disabled={!title || !body || !image} loading={submitLoader} type='primary' htmlType='submit'>
+              Create post
+            </Button>
+          </div>
+        </Form>
+      </Card>
     </div>
   );
 };
 
 export default CreatePost;
+
+// Old Approach Post Form
+{
+  /* <form onSubmit={handleSubmit}>
+        <div className='input-field col s6'>
+          <input value={title} name='title' onChange={InputValue} id='title' type='text' className='validate' />
+          <label htmlFor='title'>Title</label>
+        </div>
+
+        <div className='input-field col s6'>
+          <input value={body} name='body' onChange={InputValue} id='body' type='text' className='validate' />
+          <label htmlFor='body'>Message</label>
+        </div>
+
+        <div className='file-field input-field'>
+          <div className='btn upldbtn  #64b5f6 blue lighten-1'>
+            <span>Upload photo</span>
+            <input onChange={onImageChange} type='file' multiple accept='image/*' />
+          </div>
+          {image ? (
+            <div className='avatar-preview'>
+              <img id='imagePreview' src={image} className='' alt='avatar' />
+            </div>
+          ) : (
+            <span id='nophoto'>No photo choosen</span>
+          )}
+        </div>
+
+        <button type='submit' className='btn waves-effect mt-3 waves-light #64b5f6 blue lighten-1'>
+          Create post
+        </button>
+      </form> */
+}

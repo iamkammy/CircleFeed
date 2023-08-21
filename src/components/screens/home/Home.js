@@ -12,7 +12,7 @@ import Add from "@material-ui/icons/Add";
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 500,
-    margin: "70px auto 20px",
+    margin: "20px auto 20px",
     [theme.breakpoints.down("sm")]: {
       maxWidth: "98vw",
     },

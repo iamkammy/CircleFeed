@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useCallback } from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -16,6 +16,9 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import { Button, Divider } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+
+import "./navbar.scss";
+import { message } from "antd";
 
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -35,6 +38,9 @@ import { debounce } from "../utils/utils";
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
+    position: "sticky",
+    top: 0,
+    zIndex: 10,
   },
   toolbar: {
     [theme.breakpoints.down("sm")]: {
@@ -45,11 +51,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("sm")]: {
       paddingLeft: "6px",
     },
-  },
-  AppBar: {
-    backgroundColor: "#ffffff",
-    color: "#000000",
-    borderBottom: "0.2px solid #e8e8e8",
   },
   MuiButton: {
     textTransform: "none",
@@ -66,6 +67,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 362,
     backgroundColor: "#ffffff",
     zIndex: 999,
+    maxHeight: "550px",
+    overflowY: "auto",
     boxShadow: "0 1px 6px rgba(32,33,36,.28)",
     borderColor: "rgba(223,225,229,0)",
     [theme.breakpoints.down("sm")]: {
@@ -177,7 +180,7 @@ const Navbar = () => {
           setUsers(result.data.users);
         }
         if (result.data.users.length === 0) {
-          handleSnackBar("No users found", "warning", 2000, { vertical: "bottom", horizontal: "left" });
+          message.info("No users found");
           setUsers([]);
         }
       })
@@ -197,7 +200,7 @@ const Navbar = () => {
     }
     setShowuserDiv(true);
     // fetchUsers(e.target.value);
-    searchUsers(e.target.value);
+    // searchUsers(e.target.value);
   };
 
   const closeUserDiv = () => {
@@ -373,7 +376,7 @@ const Navbar = () => {
 
   return (
     <div className={`${classes.grow}`}>
-      <AppBar className={classes.AppBar} elevation={4} position='fixed'>
+      <AppBar className='navbar' elevation={0}>
         <Toolbar className={classes.toolbar}>
           <Typography variant='h4' className={`brand-logo ${classes.brand}`}>
             <NavLink to={state ? "/" : "/login"}>Instagram</NavLink>
@@ -397,7 +400,10 @@ const Navbar = () => {
 
             <Input
               value={searchText}
-              onChange={handleSearchUser}
+              onChange={(e) => {
+                handleSearchUser(e);
+                searchUsers(e.target.value);
+              }}
               allowClear
               placeholder='Search User by emails…'
               style={{ borderColor: "#fff", width: "100%" }}
@@ -431,9 +437,18 @@ const Navbar = () => {
                 loading={isLoading}
                 dataSource={users}
                 renderItem={(user, index) => (
-                  <AntList.Item>
-                    <AntList.Item.Meta avatar={<Avatar src={user.pic} />} title={<a href='#'>{user.name}</a>} description={user.email} />
-                  </AntList.Item>
+                  <NavLink
+                    onClick={closeUserDiv}
+                    to={state ? (user._id !== state._id ? `/profile/${user._id}` : `/profile`) : `/profile/${user._id}`}
+                    key={user._id}>
+                    <AntList.Item>
+                      <AntList.Item.Meta
+                        avatar={<Avatar src={user.pic} alt='user pic' />}
+                        title={<a href='#'>{user.name}</a>}
+                        description={user.email}
+                      />
+                    </AntList.Item>
+                  </NavLink>
                 )}
               />
             )}

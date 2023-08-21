@@ -21,9 +21,7 @@ const UserProfile = () => {
   const { state, dispatch } = useContext(UserContext);
   const { userid } = useParams();
   const classes = useStyles();
-  const [isFollowed, setIsFollowed] = useState(
-    state ? state.following.includes(userid) : false
-  );
+  const [isFollowed, setIsFollowed] = useState(state ? state.following.includes(userid) : false);
 
   useEffect(() => {
     setIsFollowed(state ? state.following.includes(userid) : false);
@@ -98,9 +96,7 @@ const UserProfile = () => {
         localStorage.setItem("user", JSON.stringify(res.data));
         setIsFollowed(false);
         setUserProfile((prevState) => {
-          const newFollowers = prevState.user.followers.filter(
-            (item) => item !== res.data._id
-          );
+          const newFollowers = prevState.user.followers.filter((item) => item !== res.data._id);
           return {
             ...prevState,
             user: {
@@ -118,73 +114,51 @@ const UserProfile = () => {
   // Runs only when mount component
   useEffect(() => {
     profile();
-  }, []);
+  }, [userid]);
 
   return (
     <>
       {!userProfile ? (
         <h2>loading...!</h2>
       ) : (
-        <div className="parent">
-          <div className="holder">
-            <div className="avatar">
-              <img src={userProfile.user.pic} alt="avatar" />
+        <div className='parent'>
+          <div className='holder'>
+            <div className='avatar'>
+              <img src={userProfile.user.pic} alt='avatar' />
             </div>
 
-            <div className="details">
+            <div className='details'>
               <h3>{userProfile.user.name}</h3>
               <h5>{userProfile.user.email}</h5>
-              <div className="flex">
+              <div className='flex'>
                 <h6>
-                  {userProfile.posts.length}{" "}
-                  {userProfile.posts.length < 2 ? "post" : "posts"}
+                  {userProfile.posts.length} {userProfile.posts.length < 2 ? "post" : "posts"}
                 </h6>
                 <h6>
-                  {userProfile.user.followers.length}{" "}
-                  {userProfile.user.followers.length < 2
-                    ? "follower"
-                    : "followers"}
+                  {userProfile.user.followers.length} {userProfile.user.followers.length < 2 ? "follower" : "followers"}
                 </h6>
                 <h6>
-                  {userProfile.user.following.length}{" "}
-                  {userProfile.user.following.length < 2
-                    ? "following"
-                    : "followings"}
+                  {userProfile.user.following.length} {userProfile.user.following.length < 2 ? "following" : "followings"}
                 </h6>
               </div>
               {!isFollowed ? (
-                <Button
-                  variant="contained"
-                  onClick={followUser}
-                  className={classes.followbtn}
-                >
+                <Button variant='contained' onClick={followUser} className={classes.followbtn}>
                   Follow
                 </Button>
               ) : (
-                <Button
-                  variant="contained"
-                  onClick={unFollowUser}
-                  className={classes.followbtn}
-                >
+                <Button variant='contained' onClick={unFollowUser} className={classes.followbtn}>
                   Unfollow
                 </Button>
               )}
             </div>
           </div>
 
-          <div className="gallery">
+          <div className='gallery'>
             {userProfile.posts.length === 0 ? (
               <h6>No Posts available</h6>
             ) : (
               userProfile.posts.map((item) => {
-                return (
-                  <img
-                    key={item._id}
-                    className="item"
-                    src={item.photo}
-                    alt="mypost"
-                  />
-                );
+                return <img key={item._id} className='item' src={item.photo} alt='mypost' />;
               })
             )}
           </div>
