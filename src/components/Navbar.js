@@ -32,8 +32,8 @@ import axios from "../helpers/axios";
 
 import { Avatar as AntAvatar, List as AntList, Input } from "antd";
 
-// Utility Functions
-import { debounce } from "../utils/utils";
+// custom hook
+import { useDebounce } from "../hooks/useDebounce";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -174,7 +174,6 @@ const Navbar = () => {
     axios
       .post("/findusers", { query: email })
       .then((result) => {
-        setIsLoading(false);
         console.log(result.data.users);
         if (result.data.users.length > 0) {
           setUsers(result.data.users);
@@ -185,12 +184,14 @@ const Navbar = () => {
         }
       })
       .catch((err) => {
-        setIsLoading(false);
         console.log(err.response);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
-  const searchUsers = debounce(fetchUsers, 500);
+  const searchUsers = useDebounce(fetchUsers, 300);
 
   const handleSearchUser = (e) => {
     setSearchText(e.target.value);
@@ -458,7 +459,12 @@ const Navbar = () => {
           <div className={classes.sectionDesktop}>{renderListDesktop()}</div>
 
           <div className={classes.sectionMobile}>
-            <IconButton aria-label='show more' aria-controls={mobileMenuId} aria-haspopup='true' onClick={handleMobileMenuOpen} color='inherit'>
+            <IconButton
+              aria-label='show more'
+              aria-controls={mobileMenuId}
+              aria-haspopup='true'
+              onClick={handleMobileMenuOpen}
+              color='inherit'>
               <Avatar alt='user-pic' src={state?.pic} className={classes.small} />
             </IconButton>
           </div>
