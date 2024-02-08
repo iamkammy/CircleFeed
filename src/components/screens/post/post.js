@@ -6,16 +6,7 @@ import { useHistory } from "react-router-dom";
 import commentIcon from "../../../assets/icons/commentIcon.png";
 import { RWebShare } from "react-web-share";
 
-import {
-  Menu,
-  MenuItem,
-  Grid,
-  CssBaseline,
-  ListItemIcon,
-  ListItemText,
-  Link,
-  Divider,
-} from "@material-ui/core";
+import { Menu, MenuItem, Grid, CssBaseline, ListItemIcon, ListItemText, Link, Divider } from "@material-ui/core";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import SendIcon from "@material-ui/icons/Send";
@@ -39,7 +30,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    marginBottom: '10px'
+    marginBottom: "10px",
   },
   redHeart: {
     color: "#e25656",
@@ -232,55 +223,43 @@ const Post = ({ item, removepost }) => {
 
   // Function to navigate to user profile
   const handleProfile = () => {
-    history.push(`${item.postedBy._id !== state._id ? "/profile/" + item.postedBy._id : "/profile"}`)
-  }
+    history.push(`${item.postedBy._id !== state._id ? "/profile/" + item.postedBy._id : "/profile"}`);
+  };
 
   const { pic, name } = item.postedBy;
 
   return (
-    <Card className={classes.card} >
+    <Card className={classes.card}>
       <CardHeader
         avatar={
-          pic && !pic.includes("default-user-image-2_pputze") ?
-            (<Avatar alt="user-image" src={pic} />)
-            : (
-              <Avatar aria-label="recipe" className={classes.avatar}>
-                {name.split("")[0]}
-              </Avatar>
-            )
+          pic && !pic.includes("default-user-image-2_pputze") ? (
+            <Avatar alt='user-image' src={pic} />
+          ) : (
+            <Avatar aria-label='recipe' className={classes.avatar}>
+              {name.split("")[0]}
+            </Avatar>
+          )
         }
         action={
-          <IconButton
-            onClick={handleClick}
-            aria-controls="long-menu"
-            aria-haspopup="true"
-            aria-label="settings"
-          >
+          <IconButton onClick={handleClick} aria-controls='long-menu' aria-haspopup='true' aria-label='settings'>
             <MoreVertIcon />
           </IconButton>
         }
         title={name}
-        subheader="September 14, 2016"
+        subheader='September 14, 2016'
       />
-      <Menu
-        id="simple-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
+      <Menu id='simple-menu' anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
         <RWebShare
           data={{
             text: "Have a look at Circle App !!",
             url: link,
             title: "Checkout this post",
-          }}
-        >
+          }}>
           <MenuItem>
             <ListItemIcon>
               <ShareIcon />
             </ListItemIcon>
-            <ListItemText primary="Share" />{" "}
+            <ListItemText primary='Share' />{" "}
           </MenuItem>
         </RWebShare>
 
@@ -288,19 +267,14 @@ const Post = ({ item, removepost }) => {
           <ListItemIcon>
             <AccountCircleIcon />
           </ListItemIcon>
-          <ListItemText primary="User Profile" />
+          <ListItemText primary='User Profile' />
         </MenuItem>
       </Menu>
 
-      <CardMedia
-        component="img"
-        height="100%"
-        image={item.photo}
-        title={`${name} post`}
-      />
+      <CardMedia component='img' height='100%' image={item.photo} title={`${name} post`} />
       <CardContent className={classes.cardContent}>
-        <Typography variant="subtitle1">{item.title}</Typography>
-        <Typography variant="body1">{item.body}</Typography>
+        <Typography variant='subtitle1'>{item.title}</Typography>
+        <Typography variant='body1'>{item.body}</Typography>
       </CardContent>
 
       <CardActions disableSpacing>
@@ -310,16 +284,12 @@ const Post = ({ item, removepost }) => {
           </IconButton>
         ) : (
           <IconButton onClick={likePost}>
-            <FavoriteBorderIcon fontSize="default" />
+            <FavoriteBorderIcon fontSize='default' />
           </IconButton>
         )}
-        <IconButton onClick={handleComment} aria-label="comment">
+        <IconButton onClick={handleComment} aria-label='comment'>
           <div className={classes.commentIconHolder}>
-            <img
-              style={{ width: "93%" }}
-              src={commentIcon}
-              alt="comment-icon"
-            />
+            <img style={{ width: "93%" }} src={commentIcon} alt='comment-icon' />
           </div>
         </IconButton>
 
@@ -328,58 +298,44 @@ const Post = ({ item, removepost }) => {
             text: "Have a look at Circle App !!",
             url: link,
             title: "Checkout this post",
-          }}
-        >
-          <IconButton aria-label="share">
+          }}>
+          <IconButton aria-label='share'>
             <ShareIcon />
           </IconButton>
         </RWebShare>
-
       </CardActions>
 
       <CardContent className={classes.bottomCardContent}>
-        <Typography variant="subtitle2" style={{ marginBottom: "1rem" }}>
+        <Typography variant='subtitle2' style={{ marginBottom: "1rem" }}>
           {likes.length} {likes.length < 2 ? "like" : "likes"}
         </Typography>
         {comments.length ? (
           comments && (
             <>
-              <div className="commenters">
-                <Avatar
-                  className={classes.small}
-                  src={comments[0].commentedBy.pic}
-                  alt="user-pic"
-                />
-                <Typography
-                  variant="subtitle2"
-                  style={{ paddingLeft: "4px", minWidth: "110px" }}
-                >
+              <div className='commenters'>
+                <Avatar className={classes.small} src={comments[0].commentedBy.pic} alt='user-pic' />
+                <Typography variant='subtitle2' style={{ paddingLeft: "4px", minWidth: "110px" }}>
                   {comments[0].commentedBy.name}
                 </Typography>
-                <Typography variant="body1" style={{ paddingLeft: "10px" }}>
+                <Typography variant='body1' style={{ paddingLeft: "10px" }}>
                   {comments[0].text}
                 </Typography>
               </div>
-              <Typography
-                onClick={handleComment}
-                component="p"
-                color="textSecondary"
-                variant="caption"
-              >
-                <Link color="inherit" style={{ cursor: "pointer" }}>
+              <Typography onClick={handleComment} component='p' color='textSecondary' variant='caption'>
+                <Link color='inherit' style={{ cursor: "pointer" }}>
                   View all {comments.length} comments
                 </Link>
               </Typography>
             </>
           )
         ) : (
-          <Typography color="textSecondary" variant="caption">
+          <Typography color='textSecondary' variant='caption'>
             No comments available
           </Typography>
         )}
       </CardContent>
 
-      {/* Modal section start*/}
+      {/* Modal section start For Simgle Post*/}
       <Modal
         className={classes.modal}
         open={openModal}
@@ -388,39 +344,34 @@ const Post = ({ item, removepost }) => {
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
-        }}
-      >
+        }}>
         <Fade in={openModal}>
           <div className={classes.paper}>
             <Grid container style={{ width: "100%", height: "100%" }}>
               <CssBaseline />
-              <Grid item xs={12} md={6} lg={6} sm={12}
-                style={{
-                  backgroundImage: `url(${item.photo})`,
-                  backgroundSize: "100% 100%",
-                  backgroundRepeat: "no-repeat",
-                }}
-              ></Grid>
+              <Grid item xs={12} md={6} lg={6} sm={12}>
+                <div style={{ width: "100%", height: "100%" }}>
+                  <img
+                    src={item.photo}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    alt='User Image'
+                  />
+                </div>
+              </Grid>
 
-              <Grid item xs={12} md={6} lg={6} sm={12} style={{ padding: "20px" }} >
+              <Grid item xs={12} md={6} lg={6} sm={12} style={{ padding: "20px" }}>
                 {
                   <>
-                    <div className="commenters">
-                      <Avatar src={pic} alt="user-pic" />
-                      <Typography
-                        variant="subtitle2"
-                        style={{ paddingLeft: "4px", minWidth: "110px" }}
-                      >
+                    <div className='commenters'>
+                      <Avatar src={pic} alt='user-pic' />
+                      <Typography variant='subtitle2' style={{ paddingLeft: "4px", minWidth: "110px" }}>
                         {name}
                       </Typography>
-                      <Typography
-                        variant="body1"
-                        style={{ paddingLeft: "10px" }}
-                      >
+                      <Typography variant='body1' style={{ paddingLeft: "10px" }}>
                         {item.title}
                       </Typography>
                     </div>
-                    <Typography variant="body1">{item.body}</Typography>
+                    <Typography variant='body1'>{item.body}</Typography>
                   </>
                 }
                 <Divider />
@@ -430,79 +381,52 @@ const Post = ({ item, removepost }) => {
                     comments &&
                     comments.map((comment) => {
                       return (
-                        <div key={comment._id} className="commenters">
-                          <Avatar
-                            className={classes.small}
-                            src={comment.commentedBy.pic}
-                            alt="user-pic"
-                          />
-                          <Typography
-                            variant="subtitle2"
-                            style={{ paddingLeft: "4px", minWidth: "110px" }}
-                          >
+                        <div key={comment._id} className='commenters'>
+                          <Avatar className={classes.small} src={comment.commentedBy.pic} alt='user-pic' />
+                          <Typography variant='subtitle2' style={{ paddingLeft: "4px", minWidth: "110px" }}>
                             {comment.commentedBy.name}
                           </Typography>
-                          <Typography
-                            variant="body1"
-                            style={{ paddingLeft: "10px" }}
-                          >
+                          <Typography variant='body1' style={{ paddingLeft: "10px" }}>
                             {comment.text}
                           </Typography>
                         </div>
                       );
                     })
                   ) : (
-                    <Typography color="textSecondary" variant="caption">
+                    <Typography color='textSecondary' variant='caption'>
                       No comments available
                     </Typography>
                   )}
                 </ul>
                 <Divider />
-                <Typography variant="subtitle2">
+                <Typography variant='subtitle2'>
                   {likes.length} {likes.length < 2 ? "like" : "likes"}
                 </Typography>
                 <CardActions style={{ margin: "0", padding: "0" }}>
                   {likes && likes.includes(state._id) ? (
-                    <IconButton
-                      className={classes.redHeart}
-                      onClick={unlikePost}
-                    >
+                    <IconButton className={classes.redHeart} onClick={unlikePost}>
                       <FavoriteIcon />
                     </IconButton>
                   ) : (
                     <IconButton onClick={likePost}>
-                      <FavoriteBorderIcon fontSize="default" />
+                      <FavoriteBorderIcon fontSize='default' />
                     </IconButton>
                   )}
-                  <IconButton onClick={handleComment} aria-label="comment">
+                  <IconButton onClick={handleComment} aria-label='comment'>
                     <div className={classes.commentIconHolder}>
-                      <img
-                        style={{ width: "93%" }}
-                        src={commentIcon}
-                        alt="comment-icon"
-                      />
+                      <img style={{ width: "93%" }} src={commentIcon} alt='comment-icon' />
                     </div>
                   </IconButton>
 
-                  <IconButton aria-label="share">
+                  <IconButton aria-label='share'>
                     <ShareIcon />
                   </IconButton>
                 </CardActions>
 
-                <div className="commentBox">
+                <div className='commentBox'>
                   <form onSubmit={makeComment}>
-                    <input
-                      onChange={fillCommentText}
-                      value={commentText}
-                      type="text"
-                      placeholder="Add a comment"
-                    />
-                    <div
-                      className={
-                        commentText.length > 0 ? "undisabled" : "disabled"
-                      }
-                      id="sendicon"
-                    >
+                    <input onChange={fillCommentText} value={commentText} type='text' placeholder='Add a comment' />
+                    <div className={commentText.length > 0 ? "undisabled" : "disabled"} id='sendicon'>
                       {" "}
                       <SendIcon className={classes.sendIcon} />{" "}
                     </div>
@@ -516,18 +440,10 @@ const Post = ({ item, removepost }) => {
 
       {/* Modal ends */}
 
-      <div className="commentBox">
+      <div className='commentBox'>
         <form onSubmit={makeComment}>
-          <input
-            onChange={fillCommentText}
-            value={commentText}
-            type="text"
-            placeholder="Add a comment"
-          />
-          <div
-            className={commentText.length > 0 ? "undisabled" : "disabled"}
-            id="sendicon"
-          >
+          <input onChange={fillCommentText} value={commentText} type='text' placeholder='Add a comment' />
+          <div className={commentText.length > 0 ? "undisabled" : "disabled"} id='sendicon'>
             {" "}
             <SendIcon className={classes.sendIcon} />{" "}
           </div>
